@@ -1,8 +1,8 @@
->>> Dynamic PDF Data Extraction & Storage
+** Dynamic PDF Data Extraction & Storage**
 
 A simple full-stack project that allows users to upload a PDF, extract table/text data, convert it into JSON, and store it in a database with a dynamic schema. The database automatically adds new columns based on JSON keys from each uploaded file. Users can also view stored records and run basic data analysis.
 
->>>Features
+**Features**
 
 Upload PDF files
 
