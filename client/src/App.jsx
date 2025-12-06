@@ -10,7 +10,7 @@ export default function App() {
       <div className="max-w-6xl mx-auto">
         <header className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-semibold">PDF Extractor</h1>
-          <div className="text-sm text-slate-600">React + Vite + Tailwind</div>
+        
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
