@@ -4,45 +4,39 @@ import { analyze, analyzeFrequency, analyzeHist } from "../api";
 
 function StatCard({ label, value }) {
   return (
-    <div className="bg-white border rounded-lg p-4 shadow-sm flex-1 min-w-[140px]">
+    <div className="bg-white border rounded-lg p-4 shadow-sm flex-1 min-w-[120px]">
       <div className="text-xs text-slate-500">{label}</div>
       <div className="mt-2 text-lg font-semibold">{value ?? "N/A"}</div>
     </div>
   );
 }
 
-function Histogram({ bins = [], height = 120 }) {
-  if (!bins || !bins.length) {
-    return <div className="text-sm text-slate-500">No numeric distribution available.</div>;
-  }
+// function Histogram({ bins = [], height = 120 }) {
+//   if (!bins || !bins.length) {
+//     return <div className="text-sm text-slate-500">No numeric distribution available.</div>;
+//   }
 
-  const maxCount = Math.max(...bins.map(b => b.count || 0), 1);
-  const barWidth = Math.max(8, Math.floor(600 / bins.length));
+//   const maxCount = Math.max(...bins.map(b => b.count || 0), 1);
+//   const barWidth = Math.max(8, Math.floor(600 / bins.length));
 
-  return (
-    <svg viewBox={`0 0 ${bins.length * barWidth} ${height}`} className="w-full h-28">
-      {bins.map((b, i) => {
-        const h = (b.count / maxCount) * (height - 20);
-        const x = i * barWidth + 6;
-        const y = height - h - 4;
-        return (
-          <g key={i}>
-            <rect x={x} y={y} width={barWidth - 10} height={h} rx="3" fill="#60A5FA"></rect>
-            <text
-              x={x + (barWidth - 10) / 2}
-              y={height - 2}
-              fontSize="10"
-              fill="#475569"
-              textAnchor="middle"
-            >
-              {b.count}
-            </text>
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
+//   return (
+//     <svg viewBox={`0 0 ${Math.max(300, bins.length * barWidth)} ${height}`} className="w-full h-28">
+//       {bins.map((b, i) => {
+//         const h = (b.count / maxCount) * (height - 20);
+//         const x = i * barWidth + 6;
+//         const y = height - h - 4;
+//         return (
+//           <g key={i}>
+//             <rect x={x} y={y} width={Math.max(4, barWidth - 12)} height={h} rx="3" fill="#60A5FA" />
+//             <text x={x + (Math.max(4, barWidth - 12) / 2)} y={height - 2} fontSize="10" fill="#475569" textAnchor="middle">
+//               {b.count}
+//             </text>
+//           </g>
+//         );
+//       })}
+//     </svg>
+//   );
+// }
 
 export default function AnalyzePanel({ columns = [] }) {
   const [selected, setSelected] = useState(columns[0] || "");
@@ -69,7 +63,7 @@ export default function AnalyzePanel({ columns = [] }) {
       const [s, h, f] = await Promise.allSettled([
         analyze(selected),
         analyzeHist(selected, bins),
-        analyzeFrequency(selected, 8)
+        analyzeFrequency(selected, 8),
       ]);
 
       if (s.status === "fulfilled") setStats(s.value);
@@ -84,19 +78,14 @@ export default function AnalyzePanel({ columns = [] }) {
     }
   }
 
-  const fmt = (v) =>
-    v === null || v === undefined ? "N/A" : Intl.NumberFormat().format(v);
+  const fmt = (v) => (v === null || v === undefined ? "N/A" : Intl.NumberFormat().format(v));
 
   return (
-    // CENTER INSIDE MAIN CONTENT: offset by sidebar width (ml-60 = 240px)
-    <div className="w-full flex justify-center px-1 py-8 ml-60">
-      <div className="w-full max-w-5xl">
+    <div className="w-full flex justify-center px-4 py-6">
+      <div className="w-full max-w-4xl mx-auto">
         <div className="bg-white border rounded-2xl p-6 shadow-md">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-xl font-semibold">Analyze</h3>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             
-            </div>
 
             <div className="flex items-center gap-3">
               <select
@@ -157,7 +146,7 @@ export default function AnalyzePanel({ columns = [] }) {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 bg-slate-50 border rounded-lg p-4">
+            <div className="md:col-span-2 bg-slate-50 border rounded-lg p-4 min-h-[140px]">
               <div className="text-sm text-slate-600 mb-2 font-medium">Distribution</div>
               {hist && hist.bins && hist.bins.length ? (
                 <>
@@ -169,14 +158,14 @@ export default function AnalyzePanel({ columns = [] }) {
               )}
             </div>
 
-            <div className="bg-slate-50 border rounded-lg p-4">
+            <div className="bg-slate-50 border rounded-lg p-4 min-h-[140px]">
               <div className="flex items-center justify-between mb-2">
                 <div className="font-medium">Top values</div>
                 <div className="text-xs text-slate-400">Top 8</div>
               </div>
 
               {freq && freq.top && freq.top.length ? (
-                <ul className="space-y-2">
+                <ul className="space-y-2 max-h-48 overflow-auto">
                   {freq.top.map((t, i) => (
                     <li key={i} className="flex items-center justify-between bg-white rounded p-2 shadow-sm">
                       <div className="text-sm truncate" title={String(t.value)}>{String(t.value) || "<empty>"}</div>

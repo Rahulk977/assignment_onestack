@@ -11,99 +11,113 @@ export default function App() {
   const [dbState, setDbState] = useState({ items: [], columns: [] });
 
   return (
-    <div className="min-h-screen bg-slate-100 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r p-6 flex flex-col gap-4">
-        <h1 className="text-xl font-bold mb-4">Pdfetch</h1>
+    <div className="min-h-screen bg-slate-100 grid grid-cols-[16rem_1fr]">
+      {/* SIDEBAR */}
+      <aside className="w-64 bg-white border-r p-6 flex flex-col gap-6">
+        <h1 className="text-2xl font-bold">Pdfetch</h1>
 
-        <button
-          onClick={() => setView("upload")}
-          className={`w-full text-left px-4 py-2 rounded ${
-            view === "upload"
-              ? "bg-blue-600 text-white"
-              : "hover:bg-slate-200 text-slate-700"
-          }`}
-        >
-          📤 Upload PDF
-        </button>
+        <nav className="flex flex-col gap-2">
+          <button
+            onClick={() => setView("upload")}
+            className={`text-left px-4 py-2 rounded-md ${
+              view === "upload" ? "bg-blue-600 text-white" : "hover:bg-slate-50"
+            }`}
+          >
+            📤 Upload PDF
+          </button>
 
-        <button
-          onClick={() => setView("data")}
-          className={`w-full text-left px-4 py-2 rounded ${
-            view === "data"
-              ? "bg-blue-600 text-white"
-              : "hover:bg-slate-200 text-slate-700"
-          }`}
-        >
-          📁 View Database
-        </button>
+          <button
+            onClick={() => setView("data")}
+            className={`text-left px-4 py-2 rounded-md ${
+              view === "data" ? "bg-blue-600 text-white" : "hover:bg-slate-50"
+            }`}
+          >
+            📁 View Database
+          </button>
 
-        <button
-          onClick={() => setView("analyze")}
-          className={`w-full text-left px-4 py-2 rounded ${
-            view === "analyze"
-              ? "bg-blue-600 text-white"
-              : "hover:bg-slate-200 text-slate-700"
-          }`}
-        >
-          📊 Analyze Data
-        </button>
-
-     
+          <button
+            onClick={() => setView("Analysis Dashboard")}
+            className={`text-left px-4 py-2 rounded-md ${
+              view === "Analysis Dashboard"
+                ? "bg-blue-600 text-white"
+                : "hover:bg-slate-50"
+            }`}
+          >
+            📊 Analysis Dashboard
+          </button>
+        </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-8">
-        {view === "upload" && (
-          <div className="max-w-4xl">
-            <h2 className="text-lg font-semibold mb-4">Upload & Extract PDF</h2>
-            <Upload onResult={(table) => setLastTable(table)} />
+      {/* MAIN */}
+      <main className="flex-1 p-8 flex flex-col">
+        <div className="mb-4">
+          <h2 className="text-2xl font-semibold">
+            {view === "upload"
+              ? "Upload & Extract PDF"
+              : view === "data"
+              ? "Database Records"
+              : "Analysis Dashboard"}
+          </h2>
+        </div>
 
-            {lastTable && (
-              <div className="mt-6">
-                <h3 className="text-md font-semibold mb-2">Extracted Table</h3>
-                <TableView
-                  columns={lastTable.columns}
-                  rows={lastTable.rows}
-                />
+        {/* center inner content horizontally */}
+        <div className="flex-1 flex justify-center items-start">
+          {/* width constraint + centered with mx-auto */}
+          <div className="w-full max-w-6xl mx-auto">
+            {view === "upload" && (
+              <>
+                <Upload onResult={(t) => setLastTable(t)} />
+                {lastTable && (
+                  <div className="mt-6">
+                    <h3 className="text-md font-semibold mb-2">
+                      Extracted Table
+                    </h3>
+                    <TableView
+                      columns={lastTable.columns}
+                      rows={lastTable.rows}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* {view === "data" && (
+              <>
+                <DataList onDataLoaded={(payload) => setDbState(payload)} />
+                {dbState.items.length > 0 && (
+                  <div className="mt-6">
+                    <TableView
+                      columns={dbState.columns.length ? dbState.columns : Object.keys(dbState.items[0]).filter(k => !["id","uploaded_at","raw_json"].includes(k))}
+                      rows={dbState.items.map(r => r.raw_json ? r.raw_json : r)}
+                    />
+                  </div>
+                )}
+              </>
+            )} */}
+
+            {view === "data" && (
+              <div className="max-w-5xl">
+                <h2 className="text-lg font-semibold mb-4">Database Records</h2>
+
+                {/* DataList will load & render the table itself */}
+                <DataList onDataLoaded={(payload) => setDbState(payload)} />
               </div>
             )}
-          </div>
-        )}
 
-        {view === "data" && (
-          <div className="max-w-5xl">
-            <h2 className="text-lg font-semibold mb-4">Database Records</h2>
-            <DataList
-              onDataLoaded={(payload) => setDbState(payload)}
-            />
-
-            {dbState.items.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-md font-semibold mb-2">DB Table View</h3>
-                <TableView
+            {view === "Analysis Dashboard" && (
+              // pass columns from DB or last upload
+              <div className="mt-2">
+                <AnalyzePanel
                   columns={
                     dbState.columns.length
                       ? dbState.columns
-                      : Object.keys(dbState.items[0]).filter(
-                          (k) => !["id", "uploaded_at", "raw_json"].includes(k)
-                        )
+                      : lastTable?.columns || []
                   }
-                  rows={dbState.items.map((r) =>
-                    r.raw_json ? r.raw_json : r
-                  )}
                 />
               </div>
             )}
           </div>
-        )}
-
-        {view === "analyze" && (
-          <div className="max-w-xl">
-          
-            <AnalyzePanel columns={dbState.columns || []} />
-          </div>
-        )}
+        </div>
       </main>
     </div>
   );
