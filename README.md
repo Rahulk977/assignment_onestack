@@ -25,10 +25,13 @@ Frontend: React (Vite), TailwindCSS
 
 Backend:
 
-uvicorn app.main:app --reload
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
 
 
 Frontend:
 
 npm install
 npm run dev
+
+
+
