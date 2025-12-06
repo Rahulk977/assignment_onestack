@@ -100,7 +100,7 @@ export default function App() {
 
         {view === "analyze" && (
           <div className="max-w-xl">
-            <h2 className="text-lg font-semibold mb-4">Analyze Column</h2>
+          
             <AnalyzePanel columns={dbState.columns || []} />
           </div>
         )}

@@ -39,7 +39,7 @@ export default function Upload({ onResult }) {
 
   return (
     <div>
-      <label className="block mb-2 text-sm font-medium">Upload PDF (first table only)</label>
+      <label className="block mb-2 text-sm font-medium">Upload PDF </label>
 
       <div
         className={`border-2 border-dashed rounded-md p-4 text-center cursor-pointer ${
@@ -60,8 +60,8 @@ export default function Upload({ onResult }) {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16v-4m0 0l-4 4m4-4l4 4M17 8v8m0 0l4-4m-4 4l-4-4" />
           </svg>
-          <div className="text-sm text-slate-600">Click or drop a PDF here</div>
-          <div className="text-xs text-slate-400">Backend expected at /api/upload</div>
+          <div className="text-sm text-slate-600">drop a PDF here</div>
+          
         </div>
       </div>
 

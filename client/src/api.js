@@ -41,3 +41,24 @@ export async function analyze(column) {
   }
   return res.json();
 }
+
+
+export async function analyzeFrequency(column, top = 8) {
+  const url = `${V1}/analyze/frequency?column=${encodeURIComponent(column)}&top=${encodeURIComponent(top)}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const txt = await res.text().catch(()=>null);
+    throw new Error(txt || "Frequency analysis failed");
+  }
+  return res.json();
+}
+
+export async function analyzeHist(column, bins = 10) {
+  const url = `${V1}/analyze/hist?column=${encodeURIComponent(column)}&bins=${encodeURIComponent(bins)}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const txt = await res.text().catch(()=>null);
+    throw new Error(txt || "Histogram analysis failed");
+  }
+  return res.json();
+}
