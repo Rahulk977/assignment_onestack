@@ -1,40 +1,34 @@
-** Dynamic PDF Data Extraction & Storage**
+📄 Dynamic PDF Data Extraction & Storage
 
-A simple full-stack project that allows users to upload a PDF, extract table/text data, convert it into JSON, and store it in a database with a dynamic schema. The database automatically adds new columns based on JSON keys from each uploaded file. Users can also view stored records and run basic data analysis.
+A simple system that lets users upload PDFs, extract tables/text, convert them into JSON, and store everything in a dynamic database. New JSON keys automatically create new columns in the table. The frontend shows extracted data and basic analysis.
 
-**Features**
+⭐ Features
 
-Upload PDF files
+PDF upload
 
-Extract tables + text
+Table + text extraction
 
-Convert data to JSON
+JSON conversion
 
-Auto-create / update DB columns
+Dynamic schema update
 
-Store normalized records
+Store & view records
 
-View extracted data and DB data
-
-Analyze columns (summary stats, frequency, histogram)
+Column analysis (count, min, max, avg, frequency)
 
 🛠 Tech Stack
 
-Backend: Python, FastAPI, pdfplumber / PyPDF2, SQLite / Supabase
-Frontend: React + Vite, TailwindCSS
+Backend: FastAPI, Python, pdfplumber, PostgreSQL/Supabase
+Frontend: React (Vite), TailwindCSS
 
-▶ How to Run
+▶ Run Locally
 
-Backend
+Backend:
 
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
+uvicorn app.main:app --reload
 
 
-Frontend
+Frontend:
 
 npm install
 npm run dev
-
-🔗 Live Demo
-
-https://assignment-onestackfrontend.vercel.app/
